@@ -101,9 +101,4 @@ func (h *handlerCountry) DeleteCountry(c echo.Context) error {
 	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: data})
 }
 
-func convertResponseCat(u models.Country) tripdto.CountryResponse {
-	return tripdto.CountryResponse{
-		ID:   u.ID,
-		Name: u.Name,
-	}
-}
+
