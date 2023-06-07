@@ -221,11 +221,11 @@ func SendMail(status string, transaction models.Transaction) {
 	if status != transaction.Status && (status == "success") {
 		var CONFIG_SMTP_HOST = "smtp.gmail.com"
 		var CONFIG_SMTP_PORT = 587
-		var CONFIG_SENDER_NAME = "Dumbflix <demo.dumbflix@gmail.com>"
+		var CONFIG_SENDER_NAME = "DeweTour <demo.dewetour@gmail.com>"
 		var CONFIG_AUTH_EMAIL = os.Getenv("EMAIL_SYSTEM")
 		var CONFIG_AUTH_PASSWORD = os.Getenv("PASSWORD_SYSTEM")
 
-		var productName = "Subscription Dumbflix"
+		var productName = "trip booking"
 		var price = strconv.Itoa(transaction.Total)
 
 		mailer := gomail.NewMessage()
