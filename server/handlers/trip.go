@@ -25,7 +25,7 @@ func HandlerTrip(TripRepository repositories.TripRepository) *handlerTrip {
 	return &handlerTrip{TripRepository}
 }
 
-var path_file = "http://localhost:5000/uploads/"
+// var path_file = "http://localhost:5000/uploads/"
 
 func (h *handlerTrip) FindTrip(c echo.Context) error {
 	trip, err := h.TripRepository.FindTrip()
@@ -34,9 +34,9 @@ func (h *handlerTrip) FindTrip(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	for i, t := range trip {
-		trip[i].Image = path_file + t.Image
-	}
+	// for i, t := range trip {
+	// 	trip[i].Image = path_file + t.Image
+	// }
 
 	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: trip})
 }
@@ -50,7 +50,7 @@ func (h *handlerTrip) GetTrip(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	trip.Image = path_file + trip.Image
+	// trip.Image = path_file + trip.Image
 
 	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: trip})
 }
