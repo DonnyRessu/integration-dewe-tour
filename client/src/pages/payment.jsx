@@ -16,7 +16,7 @@ const Payment = ({ dataTrans }) => {
   });
   console.log("gendi", dataTrans);
   const [state, _] = useContext(UserContext);
-  console.log(state);
+  console.log("bangsatt", state);
 
   const rupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -40,10 +40,9 @@ const Payment = ({ dataTrans }) => {
         tripid: tripsss?.id,
       };
 
-      console.log("teguh", data);
+      console.log("adasdas", data);
       const response = await API.post("/transaction", data, config);
-        alert("transaksi entot");
-      
+      alert("transaksi sukses");
     } catch (err) {
       console.log(err);
     }
@@ -113,7 +112,7 @@ const Payment = ({ dataTrans }) => {
           </div>
           <div className="flex gap-14 mx-5 border-b mb-2 pb-2">
             <p>1</p>
-            <p className="text-black">{state?.user?.fullName}</p>
+            <p className="text-black">{state?.user?.fullname}</p>
             <p>Male</p>
             <p>{state?.user?.phone}</p>
             <p className="text-black font-medium">Qty</p>
