@@ -194,8 +194,12 @@ func (h *handlerTransaction) Notification(c echo.Context) error {
 			h.TransactionRepository.UpdateTransaction("pending", order_id)
 		} else if fraudStatus == "accept" {
 			SendMail("success", transaction)
+			_, err := h.TransactionRepository.UpdateTransaction("success", order_id)
+			if err != nil {
+				fmt.Println(err)
+			}
 			// TODO set transaction status on your database to 'success'
-			h.TransactionRepository.UpdateTransaction("success", order_id)
+			// h.TransactionRepository.UpdateTransaction("success", order_id)
 		}
 	} else if transactionStatus == "settlement" {
 		SendMail("success", transaction)
