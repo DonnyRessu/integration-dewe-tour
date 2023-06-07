@@ -225,12 +225,14 @@ func SendMail(status string, transaction models.Transaction) {
 		var CONFIG_AUTH_EMAIL = os.Getenv("EMAIL_SYSTEM")
 		var CONFIG_AUTH_PASSWORD = os.Getenv("PASSWORD_SYSTEM")
 
+		fmt.Println(transaction.User.Email)
+
 		var productName = "trip booking"
 		var price = strconv.Itoa(transaction.Total)
 
 		mailer := gomail.NewMessage()
 		mailer.SetHeader("From", CONFIG_SENDER_NAME)
-		mailer.SetHeader("To", transaction.User.Email)
+		mailer.SetHeader("To", "ressudonny@gmail.com")
 		mailer.SetHeader("Subject", "Transaction Status")
 		mailer.SetBody("text/html", fmt.Sprintf(`<!DOCTYPE html>
 	  <html lang="en">
