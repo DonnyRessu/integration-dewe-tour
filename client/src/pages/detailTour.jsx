@@ -9,7 +9,7 @@ import iconDuration from "../images/icon-duration.png";
 import iconDate from "../images/icon-date.png";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { API } from "../config/api";
 
 const DetailTour = ({ setDataTrans }) => {
@@ -24,17 +24,15 @@ const DetailTour = ({ setDataTrans }) => {
 
   const [total, setTotal] = useState(1);
   const tambah = () => {
-   
     total <= 1 ? setTotal(1) : setTotal(total - 1);
   };
 
   useEffect(() => {
     setDataTrans({
-        qty: total,
-        pay: tripss?.price * total,
-      });
-  }, [total])
-  
+      qty: total,
+      pay: tripss?.price * total,
+    });
+  }, [total]);
 
   const rupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -42,6 +40,72 @@ const DetailTour = ({ setDataTrans }) => {
       currency: "IDR",
     }).format(number);
   };
+
+  useEffect(() => {
+    //change this to the script source you want to load, for example this is snap.js sandbox env
+    const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+    //change this according to your client-key
+    const myMidtransClientKey = import.meta.env
+      .VITE_REACT_APP_MIDTRANS_CLIENT_KEY;
+
+    let scriptTag = document.createElement("script");
+    scriptTag.src = midtransScriptUrl;
+    // optional if you want to set script attribute
+    // for example snap.js have data-client-key attribute
+    scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+
+    document.body.appendChild(scriptTag);
+    return () => {
+      document.body.removeChild(scriptTag);
+    };
+  }, []);
+
+  const handleBook = useMutation(async () => {
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+      const data = {
+        tripid: tripss?.id,
+        counterqty: total,
+        total: tripss?.price * total,
+      };
+
+      const body = JSON.stringify(data);
+
+      const response = await API.post("/transaction", body, config);
+      console.log("transaction success :", response);
+
+      const token = response.data.data.token;
+      window.snap.pay(token, {
+        onSuccess: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          navigate("/profile");
+        },
+        onPending: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          navigate("/profile");
+        },
+        onError: function (result) {
+          /* You may add your own implementation here */
+          console.log(result);
+          navigate("/profile");
+        },
+        onClose: function () {
+          /* You may add your own implementation here */
+          alert("you closed the popup without finishing the payment");
+        },
+      });
+      const deleteall = await API.delete("/delete-order");
+      getProductOrder();
+    } catch (error) {
+      console.log("transaction failed : ", error);
+    }
+  });
 
   return (
     <>
@@ -166,11 +230,12 @@ const DetailTour = ({ setDataTrans }) => {
           </p>
         </div>
         <div className="text-right mt-7">
-          <Link to={`/payment/${id}`}>
-            <button className="bg-yellow-400 text-white px-20 py-3 rounded-md">
-              Book Now
-            </button>
-          </Link>
+          <button
+            onClick={() => handleBook.mutate()}
+            className="bg-yellow-400 text-white px-20 py-3 rounded-md"
+          >
+            Book Now
+          </button>
         </div>
       </div>
     </>

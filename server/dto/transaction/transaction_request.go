@@ -1,11 +1,15 @@
 package transactiondto
 
-import "week2/models"
+import (
+	"time"
+	"week2/models"
+)
 
 type CreateTransactionRequest struct {
 	Counterqty int         `json:"counterqty" form:"counterqty"`
 	Total      int         `json:"total" form:"total"`
 	Status     string      `json:"status" form:"status" gorm:"type: varchar(255)"`
+	Date       time.Time   `json:"date"`
 	TripID     int         `json:"tripid" form:"tripid"`
 	Trip       models.Trip `json:"trip" `
 	UserID     int         `json:"userid"`

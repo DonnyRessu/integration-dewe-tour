@@ -11,7 +11,7 @@ type TransactionRepository interface {
 	GetTransactionByID(ID int) ([]models.Transaction, error)
 	GetTransaction(ID int) (models.Transaction, error)
 	CreateTransaction(transaction models.Transaction) (models.Transaction, error)
-	UpdateTransaction(transaction models.Transaction, Id int) (models.Transaction, error)
+	UpdateTransaction(status string, orderId int) (models.Transaction, error)
 }
 
 func RepositoryTransaction(db *gorm.DB) *repository {
@@ -45,8 +45,12 @@ func (r *repository) CreateTransaction(transaction models.Transaction) (models.T
 	return transaction, err
 }
 
-func (r *repository) UpdateTransaction(transaction models.Transaction, Id int) (models.Transaction, error) {
-	err := r.db.Preload("Trip.Country").Model(&transaction).Updates(&transaction).Error
+func (r *repository) UpdateTransaction(status string, orderId int) (models.Transaction, error) {
+	var transaction models.Transaction
+	r.db.Preload("Trip.Country").First(&transaction, orderId)
+	
+	transaction.Status = status
+	err := r.db.Save(&transaction).Error
 
 	return transaction, err
 }
