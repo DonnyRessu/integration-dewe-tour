@@ -12,6 +12,7 @@ const CardGroupTour = ({ search }) => {
     setTripss(response.data.data);
     return response.data.data;
   });
+  console.log("dasjds", tripss);
 
   if (isLoading) return;
   <div>loading...</div>;
@@ -44,8 +45,12 @@ const CardGroupTour = ({ search }) => {
                 key={data?.id}
                 className="card w-72 bg-white shadow-xl  rounded-none"
               >
-                <figure>
+                <figure className="relative">
                   <img src={data?.image} className="px-2 py-2" />
+                  <div className="absolute text-sm text-black right-2 top-5 bg-white p-1 rounded">
+                    <span>{data?.current_quota}</span>/
+                    <span>{data?.quota}</span>
+                  </div>
                 </figure>
                 <div className="card-body">
                   <Link to={`/detail-tour/${data?.id}`}>
