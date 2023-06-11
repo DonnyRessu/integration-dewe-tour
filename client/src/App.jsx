@@ -35,7 +35,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [dataTrans, setDataTrans] = useState();
 
-  console.log("satttt", dataTrans);
+  // console.log("satttt", dataTrans);
 
   const checkUser = async () => {
     try {

@@ -123,7 +123,7 @@ const Profile = () => {
                   <div className="flex gap-8 items-center">
                     <div className="mr-44">
                       <p className="text-green-500 px-2 py-1 bg-green-100">
-                        approve
+                        {transUsers?.status}
                       </p>
                     </div>
                     <div>
@@ -154,13 +154,19 @@ const Profile = () => {
                 <p>{transUsers?.user?.phone}</p>
                 <p className="text-black font-medium">Qty</p>
                 <p className="text-black">
-                  :<span className="ml-7 text-black">{transUsers?.counterqty}</span>
+                  :
+                  <span className="ml-7 text-black">
+                    {transUsers?.counterqty}
+                  </span>
                 </p>
               </div>
               <div className="flex gap-14 mx-5">
                 <p className="ml-[465px] text-black font-medium">Total</p>
                 <p className="text-black">
-                  : <span className="text-red-500 ml-6">IDR. {transUsers?.total}</span>
+                  :{" "}
+                  <span className="text-red-500 ml-6">
+                    IDR. {transUsers?.total}
+                  </span>
                 </p>
               </div>
             </div>

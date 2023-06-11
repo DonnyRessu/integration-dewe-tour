@@ -100,8 +100,6 @@ const DetailTour = ({ setDataTrans }) => {
           alert("you closed the popup without finishing the payment");
         },
       });
-      const deleteall = await API.delete("/delete-order");
-      getProductOrder();
     } catch (error) {
       console.log("transaction failed : ", error);
     }
