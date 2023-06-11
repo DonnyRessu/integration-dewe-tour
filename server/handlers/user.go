@@ -1,13 +1,18 @@
 package handlers
 
 import (
+	"context"
+	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 	dto "week2/dto/result"
 	usersdto "week2/dto/users"
 	"week2/models"
 	"week2/repositories"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 )
@@ -70,30 +75,38 @@ func (h *handler) CreateUser(c echo.Context) error {
 }
 
 func (h *handler) UpdateUser(c echo.Context) error {
-	dataFile := c.Get("dataFile").(string)
-	request := new(usersdto.UpdateUserRequest)
-	if err := c.Bind(&request); err != nil {
-		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-	}
-
 	id, _ := strconv.Atoi(c.Param("id"))
-
 	user, err := h.UserRepository.GetUser(id)
+	dataFile := c.Get("dataFile").(string)
+	fmt.Println("this is data file", dataFile)
+	var ctx = context.Background()
+	var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+	var API_KEY = os.Getenv("API_KEY")
+	var API_SECRET = os.Getenv("API_SECRET")
 
+	// Add your Cloudinary credentials ...
+	cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
+
+	// Upload file to Cloudinary ...
+	resp, err := cld.Upload.Upload(ctx, dataFile, uploader.UploadParams{Folder: "dewe tour"})
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
+		fmt.Println(err.Error())
 	}
 
-	if request.Email != "" {
-		user.Email = request.Email
-	}
-
-	if request.Password != "" {
-		user.Password = request.Password
+	request := usersdto.UpdateUserRequest{
+		Fullname: c.FormValue("fullname"),
+		Email:    c.FormValue("email"),
+		Phone:    c.FormValue("phone"),
+		Address:  c.FormValue("address"),
+		Image:    resp.SecureURL,
 	}
 
 	if request.Fullname != "" {
 		user.Fullname = request.Fullname
+	}
+
+	if request.Email != "" {
+		user.Email = request.Email
 	}
 
 	if request.Phone != "" {
@@ -103,8 +116,9 @@ func (h *handler) UpdateUser(c echo.Context) error {
 	if request.Address != "" {
 		user.Address = request.Address
 	}
+
 	if request.Image != "" {
-		user.Image = dataFile
+		user.Image = request.Image
 	}
 
 	data, err := h.UserRepository.UpdateUser(user, id)
@@ -112,7 +126,7 @@ func (h *handler) UpdateUser(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: convertResponse(data)})
+	return c.JSON(http.StatusOK, dto.SuccesResult{Code: http.StatusOK, Data: data})
 }
 
 func (h *handler) DeleteUser(c echo.Context) error {

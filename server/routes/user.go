@@ -2,6 +2,7 @@ package routes
 
 import (
 	"week2/handlers"
+	"week2/pkg/middleware"
 	"week2/pkg/mysql"
 	"week2/repositories"
 
@@ -15,6 +16,6 @@ func UserRoutes(e *echo.Group) {
 	e.GET("/users", h.FindUsers)
 	e.GET("/user/:id", h.GetUser)
 	e.POST("/user", h.CreateUser)
-	e.PATCH("/user/:id", h.UpdateUser)
+	e.PATCH("/user/:id", middleware.Auth(middleware.UploadFile(h.UpdateUser)))
 	e.DELETE("/user/:id", h.DeleteUser)
 }
