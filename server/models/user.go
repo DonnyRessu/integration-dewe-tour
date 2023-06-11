@@ -10,6 +10,7 @@ type User struct {
 	Phone     string    `json:"phone" gorm:"type: VARCHAR(255)"`
 	Address   string    `json:"address" gorm:"type: VARCHAR(255)"`
 	Role      string    `json:"role" gorm:"type: VARCHAR(25)"`
+	Image     string    `json:"image"`
 	CreatedAt time.Time `json:"-"`
 	UpdatedAt time.Time `json:"-"`
 }

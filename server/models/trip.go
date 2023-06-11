@@ -14,6 +14,7 @@ type Trip struct {
 	Night          int       `json:"night"`
 	DateTrip       string    `json:"datetrip" gorm:"type VARCHAR(255)"`
 	Price          int       `json:"price"`
+	CurrentQuota   int       `json:"current_quota"`
 	Quota          int       `json:"quota"`
 	Description    string    `json:"description" gorm:"type VARCHAR(255)"`
 	Image          string    `json:"image" gorm:"type VARCHAR(255)"`
@@ -33,6 +34,7 @@ type TripResponse struct {
 	Night          int     `json:"night"`
 	DateTrip       string  `json:"datetrip"`
 	Price          int     `json:"price"`
+	CurrentQuota   int     `json:"current_quota"`
 	Quota          int     `json:"quota"`
 	Description    string  `json:"description"`
 	Image          string  `json:"image"`

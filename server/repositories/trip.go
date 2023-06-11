@@ -41,7 +41,6 @@ func (r *repository) CreateTrip(trip models.Trip) (models.Trip, error) {
 
 func (r *repository) UpdateTrip(trip models.Trip) (models.Trip, error) {
 	err := r.db.Preload("Country").Save(&trip).Error
-	// err := r.db.Exec("UPDATE trips SET country_id=? WHERE id=?", trip.CountryID, trip.ID).Error
 
 	return trip, err
 }

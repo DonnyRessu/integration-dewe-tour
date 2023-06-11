@@ -70,6 +70,7 @@ func (h *handler) CreateUser(c echo.Context) error {
 }
 
 func (h *handler) UpdateUser(c echo.Context) error {
+	dataFile := c.Get("dataFile").(string)
 	request := new(usersdto.UpdateUserRequest)
 	if err := c.Bind(&request); err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
@@ -101,6 +102,9 @@ func (h *handler) UpdateUser(c echo.Context) error {
 
 	if request.Address != "" {
 		user.Address = request.Address
+	}
+	if request.Image != "" {
+		user.Image = dataFile
 	}
 
 	data, err := h.UserRepository.UpdateUser(user, id)
