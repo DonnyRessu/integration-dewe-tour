@@ -23,8 +23,13 @@ const DetailTour = ({ setDataTrans }) => {
   console.log("anjingg", tripss);
 
   const [total, setTotal] = useState(1);
-  const tambah = () => {
+  const kurang = () => {
     total <= 1 ? setTotal(1) : setTotal(total - 1);
+  };
+  const tambah = () => {
+    tripss?.current_quota > total
+      ? setTotal(total + 1)
+      : alert("melebihi quota");
   };
 
   useEffect(() => {
@@ -207,14 +212,14 @@ const DetailTour = ({ setDataTrans }) => {
           </h2>
           <div className="flex gap-5">
             <button
-              onClick={() => tambah()}
+              onClick={() => kurang()}
               className="bg-yellow-400 px-2 rounded-md text-white"
             >
               -
             </button>
             <p>{total}</p>
             <button
-              onClick={() => setTotal(total + 1)}
+              onClick={() => tambah()}
               className="bg-yellow-400 px-2 rounded-md text-white"
             >
               +
@@ -230,7 +235,10 @@ const DetailTour = ({ setDataTrans }) => {
         <div className="text-right mt-7">
           <button
             onClick={() => handleBook.mutate()}
-            className="bg-yellow-400 text-white px-20 py-3 rounded-md"
+            className={`${
+              tripss?.current_quota < 1 ? "bg-slate-200" : "bg-yellow-400"
+            } text-white px-20 py-3 rounded-md`}
+            disabled={tripss?.current_quota < 1 ? true : false}
           >
             Book Now
           </button>

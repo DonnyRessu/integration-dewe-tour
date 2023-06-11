@@ -10,6 +10,7 @@ import { UserContext } from "../context/userContext";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { API } from "../config/api";
+import UpdateProfile from "../component/updateProfile";
 
 const Profile = () => {
   const [state, _] = useContext(UserContext);
@@ -26,11 +27,13 @@ const Profile = () => {
     const response = await API.get("/transactionuser/" + state.user.id);
     return response.data.data;
   });
+  const { data: dataUser } = useQuery("dataUser", async () => {
+    const response = await API.get("/user/" + state.user.id);
+    return response.data.data;
+  });
 
   console.log("asuuu", transUser);
 
-  //   if (!isLoading) return;
-  //   <div>loading...</div>;
   return (
     <>
       <div className="h-full bg-slate-50 pt-14 pb-20">
@@ -77,10 +80,8 @@ const Profile = () => {
             </div>
           </div>
           <div className="mx-7">
-            <img src={fotoProfile} className="h-56 mb-2 rounded" />
-            <button className="bg-yellow-400 px-4 py-3 text-white rounded">
-              Change Photo Profile
-            </button>
+            <img src={state?.user?.image} className="h-56 mb-2 rounded" />
+            <UpdateProfile />
           </div>
         </div>
         <div className="mt-14 mx-60">
