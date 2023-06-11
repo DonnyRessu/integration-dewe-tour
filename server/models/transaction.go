@@ -9,7 +9,7 @@ type Transaction struct {
 	Status     string    `json:"status" form:"status" gorm:"type: varchar(255)"`
 	Date       time.Time `json:"date"`
 	TripID     int       `json:"tripid" form:"tripid"`
-	Trip       Trip      `json:"trip" `
+	Trip       Trip      `json:"trip" gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE"`
 	UserID     int       `json:"userid" form:"userid"`
 	User       User      `json:"user"`
 }
