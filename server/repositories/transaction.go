@@ -49,12 +49,12 @@ func (r *repository) UpdateTransaction(status string, orderId int) (models.Trans
 	var transaction models.Transaction
 	r.db.Preload("Trip.Country").First(&transaction, orderId)
 
-	// if status != transaction.Status && status == "success" {
-	// 	var trip models.Trip
-	// 	r.db.First(&trip, transaction.TripID)
-	// 	trip.CurrentQuota = trip.CurrentQuota - transaction.Counterqty
-	// 	r.db.Save(&trip)
-	// }
+	if status != transaction.Status && status == "success" {
+		var trip models.Trip
+		r.db.First(&trip, transaction.TripID)
+		trip.CurrentQuota = trip.CurrentQuota - transaction.Counterqty
+		r.db.Save(&trip)
+	}
 
 	transaction.Status = status
 	err := r.db.Save(&transaction).Error
