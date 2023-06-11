@@ -2,7 +2,6 @@ package tripdto
 
 import "week2/models"
 
-
 type CreateTripRequest struct {
 	Title          string         `json:"title" form:"title" validate:"required"`
 	CountryID      int            `json:"country_id" form:"country_id" validate:"required"`
@@ -14,6 +13,7 @@ type CreateTripRequest struct {
 	Night          int            `json:"night" form:"night" validate:"required"`
 	Datetrip       string         `json:"datetrip" form:"datetrip" validate:"required"`
 	Price          int            `json:"price" form:"price" validate:"required"`
+	Currentquota   int            `json:"currentquota" form:"currentquota"`
 	Quota          int            `json:"quota" form:"quota" validate:"required"`
 	Description    string         `json:"description" form:"description" validate:"required"`
 	Image          string         `json:"image" form:"image" validate:"required"`

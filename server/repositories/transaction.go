@@ -52,9 +52,10 @@ func (r *repository) UpdateTransaction(status string, orderId int) (models.Trans
 	if status != transaction.Status && status == "success" {
 		var trip models.Trip
 		r.db.First(&trip, transaction.TripID)
-		trip.Quota = trip.Quota - transaction.Counterqty
+		trip.Quota = trip.CurrentQuota - transaction.Counterqty
 		r.db.Save(&trip)
 	}
+
 	transaction.Status = status
 	err := r.db.Save(&transaction).Error
 
